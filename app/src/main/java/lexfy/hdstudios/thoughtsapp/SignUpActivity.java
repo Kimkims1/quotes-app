@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import lexfy.hdstudios.thoughtsapp.utils.JournalApi;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private Button btnSignUp;
@@ -136,7 +138,11 @@ public class SignUpActivity extends AppCompatActivity {
                                                             String name = task.getResult()
                                                                     .getString("username");
 
-                                                            Intent intent = new Intent(SignUpActivity.this, PostThoughtsActivity.class);
+                                                            JournalApi journalApi = JournalApi.getInstance();
+                                                            journalApi.setUserId(currentUserId);
+                                                            journalApi.setUsername(username);
+
+                                                            Intent intent = new Intent(SignUpActivity.this, PostQuotesActivity.class);
                                                             intent.putExtra("username", username);
                                                             intent.putExtra("userId", currentUserId);
                                                             startActivity(intent);
