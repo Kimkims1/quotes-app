@@ -80,53 +80,54 @@ public class LoginActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            firebaseAuth.signInWithEmailAndPassword(email,password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            String currentUserId = user.getUid();
+            if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            collectionReference
-                                    .whereEqualTo("userId",currentUserId)
-                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                                String currentUserId = user.getUid();
 
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                            if (e != null){
-                                                if (!queryDocumentSnapshots.isEmpty()){
+                                collectionReference
+                                        .whereEqualTo("userId", currentUserId)
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                                                    for (QueryDocumentSnapshot qs: queryDocumentSnapshots){
-                                                        JournalApi journalApi = JournalApi.getInstance();
-                                                        journalApi.setUsername(qs.getString("username"));
-                                                        journalApi.setUserId(qs.getString("userId"));
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                if (e != null) {
+                                                    if (!queryDocumentSnapshots.isEmpty()) {
 
-                                                        //Open QuotesListActivity
-                                                        startActivity(new Intent(LoginActivity.this,PostQuotesActivity.class));
+                                                        for (QueryDocumentSnapshot qs : queryDocumentSnapshots) {
+                                                            JournalApi journalApi = JournalApi.getInstance();
+                                                            journalApi.setUsername(qs.getString("username"));
+                                                            journalApi.setUserId(qs.getString("userId"));
+
+                                                            //Open QuotesListActivity
+                                                            startActivity(new Intent(LoginActivity.this, PostQuotesActivity.class));
+
+                                                        }
+
 
                                                     }
-
-
                                                 }
                                             }
-                                        }
-                                    });
+                                        });
 
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    });
-        }
-        else {
-            Toast.makeText(this, "Empty fields not required", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                            }
+                        });
+            } else {
+                Toast.makeText(this, "Empty fields not required", Toast.LENGTH_SHORT).show();
+            }
         }
     }
-}
+

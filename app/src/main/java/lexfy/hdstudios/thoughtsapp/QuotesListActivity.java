@@ -49,6 +49,13 @@ public class QuotesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quotes_list);
 
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle != null){
+            String username = bundle.getString("username");
+            String userId = bundle.getString("userId");
+        }
+
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
