@@ -23,6 +23,11 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
     private Context context;
     private List<QuoteModel> quoteList;
 
+    public QuoteAdapter(Context context, List<QuoteModel> quoteList) {
+        this.context = context;
+        this.quoteList = quoteList;
+    }
+
     @NonNull
     @Override
     public QuoteAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,7 +45,6 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
         holder.description.setText(quoteModel.getDescription());
         // holder.name.setText(quoteModel.getUserName());
         imageUrl = quoteModel.getImage_url();
-        /*quoteModel.getTimeAdded();*/
 
         String timeAgo = (String) DateUtils.getRelativeTimeSpanString(quoteModel.getTimeAdded().getSeconds() * 1000);
         holder.dateAdded.setText(timeAgo);
